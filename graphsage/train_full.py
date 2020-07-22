@@ -59,9 +59,9 @@ def evaluate(model, features, labels, mask):
         _, indices = torch.max(logits, dim=1)
         prediction = indices.long().cpu().numpy()
         accuracy = (prediction == labels).sum() / len(prediction)
-        precision, recall, fscore, support = score(labels, prediction, average="macro")
+        precision, recall, fscore, _ = score(labels, prediction, average="macro")
 
-        return accuracy, precision, recall, fscore, support
+        return accuracy, precision, recall, fscore
 
 def main(args):
     # load and preprocess dataset
@@ -143,36 +143,25 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore, support = evaluate(model, features, labels, val_mask)
+        accuracy, precision, recall, fscore = evaluate(model, features, labels, val_mask)
         print("Epoch:", epoch)
         print("Loss:", loss.item())
         print("Accuracy:", accuracy)
         print("Precision:", precision)
         print("Recall:", recall)
         print("F-Score:", fscore)
-        print("Support:", support)
         print()
         print("=" * 79)
         print()
-        # print("Epoch {:05d} | Time(s) {:.4f} | Loss {:.4f} | Accuracy {:.4f} | Precision {:.4f} | Recall {:.4f} | "
-        #       "F-Score {:.4f} | Support {:.4f} | ETputs(KTEPS) {:.2f}".format(epoch, np.mean(dur), loss.item(),
-        #                                     acc, precision, recall, fscore, support, n_edges / np.mean(dur) / 1000))
 
-    print()
-    accuracy, precision, recall, fscore, support = evaluate(model, features, labels, test_mask)
-    print("")
-    print("--- Test STATISTICS ---")
-    print("Test Precision", precision)
-    print("Test Recall", recall)
-    print("Test F-Score", fscore)
-    print("Test Support", support)
-    print("")
-    print("--- AVERAGE STATISTICS ---")
-    print("Average Accuracy", accuracy)
-    print("Average Precision", precision.mean())
-    print("Average Recall", recall.mean())
-    print("Average F-Score", fscore.mean())
-    print("Average Support", support.mean())
+    accuracy, precision, recall, fscore = evaluate(model, features, labels, test_mask)
+    print("=" * 80)
+    print(" " * 28 + "Final Statistics")
+    print("=" * 80)
+    print("Accuracy", accuracy)
+    print("Precision", precision)
+    print("Recall", recall)
+    print("F-Score", fscore)
 
 
 if __name__ == '__main__':
