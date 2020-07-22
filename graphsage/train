@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+python train_full.py --dataset cora
