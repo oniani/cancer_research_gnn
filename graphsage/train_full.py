@@ -59,7 +59,7 @@ def evaluate(model, features, labels, mask):
         _, indices = torch.max(logits, dim=1)
         prediction = indices.long().cpu().numpy()
         accuracy = (prediction == labels).sum() / len(prediction)
-        precision, recall, fscore, support = score(labels, prediction, average="micro")
+        precision, recall, fscore, support = score(labels, prediction, average="macro")
 
         return accuracy, precision, recall, fscore, support
 
@@ -168,7 +168,7 @@ def main(args):
     print("Test Support", support)
     print("")
     print("--- AVERAGE STATISTICS ---")
-    print("Average Accuracy", acc)
+    print("Average Accuracy", accuracy)
     print("Average Precision", precision.mean())
     print("Average Recall", recall.mean())
     print("Average F-Score", fscore.mean())
