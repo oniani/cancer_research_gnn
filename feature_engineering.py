@@ -20,7 +20,7 @@ def main():
     header = ["id"]
     feats = []
     df = pd.read_csv("cora.content", sep="\t")
-    for i in range(df.shape[1]):
+    for i in range(df.shape[1] - 2):
         feat = "feat_" + str(i)
         header.append(feat)
         feats.append(feat)
