@@ -3,3 +3,5 @@ Recall:    0.923
 F-Score:   0.923
 Accuracy:  0.925
 ['feat_58', 'feat_104', 'feat_116', 'feat_37', 'feat_117', 'feat_103', 'feat_65', 'feat_44', 'feat_62', 'feat_149', 'feat_22', 'feat_57', 'feat_4', 'feat_2', 'feat_3', 'feat_63', 'feat_11', 'feat_204', 'feat_96', 'feat_150']
+
+Two classes are: Lung_Cancer and Colon/Rectum_Cancer
