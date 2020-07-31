@@ -22,7 +22,7 @@ def main():
     cites = list(csv.reader(open("temp.cites"), delimiter="\t"))
     content = list(csv.reader(open("temp.content"), delimiter="\t"))
 
-    classes = [row[-1] for row in Counter(content)]
+    classes = Counter([row[-1] for row in content])
 
     limit = min(classes.values())
 
