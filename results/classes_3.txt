@@ -1,0 +1,5 @@
+Precision: 0.91
+Recall:    0.907
+F-Score:   0.908
+Accuracy:  0.906
+['feat_118', 'feat_37', 'feat_97', 'feat_58', 'feat_98', 'feat_104', 'feat_117', 'feat_116', 'feat_103', 'feat_152', 'feat_108', 'feat_149', 'feat_24', 'feat_22', 'feat_150', 'feat_154', 'feat_139', 'feat_96', 'feat_34', 'feat_28']
