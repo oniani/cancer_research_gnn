@@ -1,5 +1,6 @@
 # Feature engineering
 import csv
+import random
 
 from collections import Counter  
 
@@ -12,12 +13,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_fscore_support as score
 
 
-LEN = 244
+random.seed(729)
+
 
 def main():
     header = ["id"]
     feats = []
-    for i in range(242):
+    df = pd.read_csv("cora.content", sep="\t")
+    for i in range(df.shape[1]):
         feat = "feat_" + str(i)
         header.append(feat)
         feats.append(feat)
@@ -25,11 +28,11 @@ def main():
 
     feats = np.array(feats)
 
-    df = pd.read_csv("temp.content", sep="\t", names=header)
+    df.columns = header
 
     x_train, x_test, y_train, y_test = train_test_split(df[feats], df["class"], test_size=0.3)
 
-    clf = RandomForestClassifier(n_estimators = 100)
+    clf = RandomForestClassifier(n_estimators = 200)
     clf.fit(x_train, y_train)
 
     importances = clf.feature_importances_
@@ -50,18 +53,18 @@ def main():
     selected_feats = [key for key, val in x_sorted[:20]]
     print(selected_feats)
 
-    content = list(csv.reader(open("temp.content"), delimiter="\t"))
+    # content = list(csv.reader(open("temp.content"), delimiter="\t"))
 
     # A hack, but works (:
-    idxs = [int(feat.split("_")[1]) for feat in selected_feats]
+    # idxs = [int(feat.split("_")[1]) for feat in selected_feats]
 
-    with open("cora.content", "w") as file:
-       content_writer = csv.writer(file, delimiter="\t")
-       for row in content:
-           lst = [row[0]]
-           lst.extend([val for idx, val in enumerate(row) if idx in idxs])
-           lst.extend([row[-1]])
-           content_writer.writerow(lst)
+    # with open("cora.content", "w") as file:
+    #    content_writer = csv.writer(file, delimiter="\t")
+    #    for row in content:
+    #        lst = [row[0]]
+    #        lst.extend([val for idx, val in enumerate(row) if idx in idxs])
+    #        lst.extend([row[-1]])
+    #        content_writer.writerow(lst)
 
 
 if __name__ == "__main__":

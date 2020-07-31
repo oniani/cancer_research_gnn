@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+# Generate new data based on select few classes
 
-# Description: Generate new data based on select few classes
-# Author: David Oniani
-# Date: 17-07-2020
-
+import argparse
 import csv
 import random
 
 from collections import Counter
+
+
+random.seed(729)
 
 
 def get_class(data, classname):
@@ -19,10 +19,14 @@ def get_class(data, classname):
 def main():
     """The main function."""
 
-    cites = list(csv.reader(open("temp.cites"), delimiter="\t"))
+    parser = argparse.ArgumentParser(description="Process the arguments.")
+    parser.add_argument("--num_classes", type=int, default=5, help="Retain a specified number of classes")
+    args = parser.parse_args()
+
+    # cites = list(csv.reader(open("temp.cites"), delimiter="\t"))
     content = list(csv.reader(open("temp.content"), delimiter="\t"))
 
-    classes = Counter([row[-1] for row in content])
+    classes = dict(Counter([row[-1] for row in content]).most_common(args.num_classes))
 
     limit = min(classes.values())
 
@@ -39,11 +43,11 @@ def main():
            content_writer.writerow(row)
 
 
-    with open("cora.cites", "w") as file:
-        cites_writer = csv.writer(file, delimiter="\t")
-        for row in cites:
-            if row[0] in ids and row[1] in ids:
-                cites_writer.writerow(row)
+    # with open("cora.cites", "w") as file:
+    #    cites_writer = csv.writer(file, delimiter="\t")
+    #    for row in cites:
+    #        if row[0] in ids and row[1] in ids:
+    #            cites_writer.writerow(row)
 
 
 if __name__ == "__main__":
