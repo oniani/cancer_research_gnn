@@ -7,6 +7,9 @@
 import csv
 import random
 
+from collections import Counter
+
+
 def get_class(data, classname):
     """Gets a list of patients based on a class."""
 
@@ -19,8 +22,7 @@ def main():
     cites = list(csv.reader(open("temp.cites"), delimiter="\t"))
     content = list(csv.reader(open("temp.content"), delimiter="\t"))
 
-    classes = {'Lung_Cancer': 250,
-               'Colon/Rectum_Cancer': 140}
+    classes = [row[-1] for row in Counter(content)]
 
     limit = min(classes.values())
 
