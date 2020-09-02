@@ -2,7 +2,7 @@
 
 GraphSAGE
 
-| Hyper-uarameter                                   | Value        |
+| Hyper-parameter                                   | Value        |
 | ------------------------------------------------- | ------------ |
 | Dropout probability                               | 0.25         |
 | Learning rate                                     | 1e-2 (0.01)  |
@@ -10,17 +10,23 @@ GraphSAGE
 | Number of hidden gcn units  (if gcn is specified) | 16           |
 | Number of hidden gcn layers (if gcn is specified) | 1            |
 | Weight for L2 loss                                | 5e-4 (0.005) |
+| Aggregator type                                   | mean         |
 
+- Accuracy: 0.9012345679012346
+- Precision: 0.9261904761904762
+- Recall: 0.9102607709750566
+- F-Score: 0.9147043432757718
 
-Average statistics:
+| Hyper-parameter                                   | Value        |
+| ------------------------------------------------- | ------------ |
+| Dropout probability                               | 0.25         |
+| Learning rate                                     | 1e-2 (0.01)  |
+| Number of training epochs                         | 800          |
+| Number of hidden gcn units  (if gcn is specified) | 16           |
+| Number of hidden gcn layers (if gcn is specified) | 1            |
+| Weight for L2 loss                                | 5e-4 (0.005) |
+| Aggregator type                                   | gcn          |
 
-Aggregator type: mean
-- Accuracy: 0.901
-- Precision: 0.926
-- Recall: 0.910
-- F-Score: 0.915
-
-Aggregator type: gcn
 - Accuracy: 0.2222222222222222
 - Precision: 0.031746031746031744
 - Recall: 0.14285714285714285
