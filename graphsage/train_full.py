@@ -143,7 +143,16 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        print("Epoch:", epoch, "|", "Loss:", loss.item())
+        accuracy, precision, recall, fscore = evaluate(model, features, labels, val_mask)
+        print("Epoch:", epoch)
+        print("Loss:", loss.item())
+        print("Accuracy:", accuracy)
+        print("Precision:", precision)
+        print("Recall:", recall)
+        print("F-Score:", fscore)
+        print()
+        print("=" * 80)
+        print()
 
     accuracy, precision, recall, fscore = evaluate(model, features, labels, test_mask)
     print("=" * 80)
