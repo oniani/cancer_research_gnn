@@ -10,15 +10,21 @@ GraphSAGE
 | Number of hidden gcn units  (if gcn is specified) | 16           |
 | Number of hidden gcn layers (if gcn is specified) | 1            |
 | Weight for L2 loss                                | 5e-4 (0.005) |
-| Aggregator type                                   | mean         |
 
 
 Average statistics:
 
+Aggregator type: mean
 - Accuracy: 0.901
 - Precision: 0.926
 - Recall: 0.910
 - F-Score: 0.915
+
+Aggregator type: gcn
+- Accuracy: 0.2222222222222222
+- Precision: 0.031746031746031744
+- Recall: 0.14285714285714285
+- F-Score: 0.051948051948051945
 
 
 ## Errors
