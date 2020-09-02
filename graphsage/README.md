@@ -1,3 +1,42 @@
+## Errors
+
+If one gets an error saying `IndexError: index X is out of bounds for axis 0 with size X`,
+below is the solution:
+
+1. Find the path of the `dgl` module
+
+```python
+import dgl
+print(dgl.__path__)
+```
+
+2. Find the file `citation_graph.py`. It is usually located under `site-packages/dgl/data/citation_graph.py` in the python lib folder
+   obtained by the previous step.
+
+3. Open `citation_graph.py` and find the where `# build symmetric adjacency matrix` comment is.
+   Then edit `train_mask, val_mask, and test_mask` so that the ranges do not exceed the index number.
+   Example is shown below.
+
+```python
+# build symmetric adjacency matrix
+adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+self.graph = nx.from_scipy_sparse_matrix(adj, create_using=nx.DiGraph())
+
+features = _normalize(features)
+self.features = np.asarray(features.todense())
+self.labels = np.where(labels)[1]
+
+# self.train_mask = _sample_mask(range(140), labels.shape[0])
+# self.val_mask = _sample_mask(range(200, 500), labels.shape[0])
+# self.test_mask = _sample_mask(range(500, 1500), labels.shape[0])
+
+self.train_mask = _sample_mask(range(447), labels.shape[0])
+self.val_mask = _sample_mask(range(447, 670), labels.shape[0])
+self.test_mask = _sample_mask(range(670, 746), labels.shape[0])
+```
+
+
+
 Inductive Representation Learning on Large Graphs (GraphSAGE)
 ============
 
