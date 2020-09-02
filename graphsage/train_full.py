@@ -158,13 +158,13 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GraphSAGE')
     register_data_args(parser)
-    parser.add_argument("--dropout", type=float, default=0.5,
+    parser.add_argument("--dropout", type=float, default=0.25,
                         help="dropout probability")
     parser.add_argument("--gpu", type=int, default=-1,
                         help="gpu")
-    parser.add_argument("--lr", type=float, default=2e-3,
+    parser.add_argument("--lr", type=float, default=1e-2,
                         help="learning rate")
-    parser.add_argument("--n-epochs", type=int, default=1000,
+    parser.add_argument("--n-epochs", type=int, default=800,
                         help="number of training epochs")
     parser.add_argument("--n-hidden", type=int, default=16,
                         help="number of hidden gcn units")
@@ -172,7 +172,7 @@ if __name__ == '__main__':
                         help="number of hidden gcn layers")
     parser.add_argument("--weight-decay", type=float, default=5e-4,
                         help="Weight for L2 loss")
-    parser.add_argument("--aggregator-type", type=str, default="gcn",
+    parser.add_argument("--aggregator-type", type=str, default="mean",
                         help="Aggregator type: mean/gcn/pool/lstm")
     args = parser.parse_args()
     print(args)
