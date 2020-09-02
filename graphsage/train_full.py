@@ -17,7 +17,7 @@ from dgl.nn.pytorch.conv import SAGEConv
 
 from sklearn.metrics import precision_recall_fscore_support as score
 
-torch.manual_seed(0)
+torch.manual_seed(2)
 
 
 class GraphSAGE(nn.Module):
