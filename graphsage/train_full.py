@@ -143,16 +143,7 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore = evaluate(model, features, labels, val_mask)
-        print("Epoch:", epoch)
-        print("Loss:", loss.item())
-        print("Accuracy:", accuracy)
-        print("Precision:", precision)
-        print("Recall:", recall)
-        print("F-Score:", fscore)
-        print()
-        print("=" * 79)
-        print()
+        print("Epoch:", epoch, "|", "Loss:", loss.item())
 
     accuracy, precision, recall, fscore = evaluate(model, features, labels, test_mask)
     print("=" * 80)
@@ -171,9 +162,9 @@ if __name__ == '__main__':
                         help="dropout probability")
     parser.add_argument("--gpu", type=int, default=-1,
                         help="gpu")
-    parser.add_argument("--lr", type=float, default=2e-2,
+    parser.add_argument("--lr", type=float, default=2e-3,
                         help="learning rate")
-    parser.add_argument("--n-epochs", type=int, default=250,
+    parser.add_argument("--n-epochs", type=int, default=1000,
                         help="number of training epochs")
     parser.add_argument("--n-hidden", type=int, default=16,
                         help="number of hidden gcn units")
