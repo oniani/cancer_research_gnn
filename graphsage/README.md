@@ -13,7 +13,7 @@ print(dgl.__path__)
 2. Find the file `citation_graph.py`. It is usually located under `site-packages/dgl/data/citation_graph.py` in the python lib folder
    obtained by the previous step.
 
-3. Open `citation_graph.py` and find the where `# build symmetric adjacency matrix` comment is.
+3. Open `citation_graph.py` and find where `# build symmetric adjacency matrix` comment is located.
    Then edit `train_mask, val_mask, and test_mask` so that the ranges do not exceed the index number.
    Example is shown below.
 
