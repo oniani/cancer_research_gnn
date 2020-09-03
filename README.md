@@ -87,6 +87,24 @@
 | Indicates whether to use early stop or not                           | False        |
 | Skip re-evaluate the validation set                                  | False        |
 
+# GCN
+
+| Statistic | Value                |
+| --------- | -------------------- |
+| Accuracy  | 0.2222222222222222   |
+| Precision | 0.031746031746031744 |
+| Recall    | 0.14285714285714285  |
+| F-Score   | 0.051948051948051945 |
+
+| Hyper-parameter                                                      | Value        |
+| -------------------------------------------------------------------- | ------------ |
+| Dropout probability                                                  | 0.25         |
+| Learning rate                                                        | 1e-1 (0.1)   |
+| Number of training epochs                                            | 800          |
+| Number of hidden gcn units                                           | 4            |
+| Number of hidden gcn layers                                          | 1            |
+| Weight for L2 loss                                                   | 5e-4 (0.0005)|
+
 
 ## Feature Engineering
 
