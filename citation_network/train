@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+python run.py --model chebnet --dataset cora
