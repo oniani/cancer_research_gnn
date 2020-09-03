@@ -18,14 +18,14 @@
 ### Mean Aggregator
 
 <table>
-<tr><th>Table 1 Heading 1 </th><th>Table 1 Heading 2</th></tr>
-<tr><td>
-| Statistic | Value              |
-| ----------| ------------------ |
-| Accuracy  | 0.9012345679012346 |
-| Precision | 0.9261904761904762 |
-| Recall    | 0.9102607709750566 |
-| F-Score   | 0.9147043432757718 |
+<tr><th>Statistics</th><th>Hyperparameters</th></tr>
+<tr><td><table></table>
+| Statistic | Value                |
+| ----------| -------------------- |
+| Accuracy  | `0.9012345679012346` |
+| Precision | `0.9261904761904762` |
+| Recall    | `0.9102607709750566` |
+| F-Score   | `0.9147043432757718` |
 
 </td><td>
 
