@@ -20,6 +20,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td><table></table>
+
 | Statistic | Value              |
 | ----------| ------------------ |
 | Accuracy  | 0.9012345679012346 |
@@ -46,6 +47,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value                |
 | ----------| -------------------- |
 | Accuracy  | 0.2222222222222222   |
@@ -72,6 +74,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 |Statistic | Value                | 
 | -------- | -------------------- |
 | Accuracy | 0.2222222222222222   |
@@ -99,6 +102,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value               |
 | --------- | ------------------- |
 | Accuracy  | 0.3333333333333333  |
@@ -132,6 +136,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value                |
 | --------- | -------------------- |
 | Accuracy  | 0.2222222222222222   |
@@ -157,6 +162,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value              |
 | --------- | ------------------ |
 | Accuracy  | 0.9012345679012346 |
@@ -184,6 +190,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value              |
 | --------- | ------------------ |
 | Accuracy  | 0.8271604938271605 |
@@ -207,6 +214,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value              |
 | --------- | ------------------ |
 | Accuracy  | 0.9012345679012346 |
@@ -230,6 +238,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value               |
 | --------- | ------------------- |
 | Accuracy  | 0.2345679012345679  |
@@ -253,6 +262,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value                |
 | --------- | -------------------- |
 | Accuracy  | 0.2222222222222222   |
@@ -276,6 +286,7 @@
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
+
 | Statistic | Value              |
 | --------- | -------------------|
 | Accuracy  | 0.9135802469135802 |
