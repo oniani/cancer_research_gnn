@@ -61,6 +61,32 @@
 | Number of kernels in GMMConv layer                                   | 3            |
 | Weight for L2 loss                                                   | 5e-4 (0.0005)|
 
+## GAT
+
+| Statistic | Value               |
+| --------- | ------------------- |
+| Accuracy  | 0.3333333333333333  |
+| Precision | 0.13022060398372243 |
+| Recall    | 0.2777777777777778  |
+| F-Score   | 0.16048370567739292 |
+| Support   | 11.571428571428571  |
+
+| Hyper-parameter                                                      | Value        |
+| -------------------------------------------------------------------- | ------------ |
+| Number of training epochs                                            | 800          |
+| Number of hidden attention heads                                     | 4            |
+| Uumber of output attention heads                                     | 1            |
+| Number of hidden layers                                              | 1            |
+| Number of hidden units                                               | 8            |
+| Use residual connection                                              | False        |
+| Input feature dropout                                                | 4            |
+| Attention dropout                                                    | 0.25         |
+| Learning rate                                                        | 1e-2 (0.01)  |
+| Weight decay                                                         | 5e-4 (0.0005)|
+| The negative slope of leaky relu                                     | 0.2          |
+| Indicates whether to use early stop or not                           | False        |
+| Skip re-evaluate the validation set                                  | False        |
+
 
 ## Feature Engineering
 
