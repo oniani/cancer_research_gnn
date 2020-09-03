@@ -18,8 +18,8 @@
 ### Mean Aggregator
 
 <table>
-<tr><th>Statistics</th><th>Hyperparameters</th></tr>
-<tr><td><table></table>
+<tr><th>Table 1 Heading 1 </th><th>Table 1 Heading 2</th></tr>
+<tr><td>
 | Statistic | Value              |
 | ----------| ------------------ |
 | Accuracy  | 0.9012345679012346 |
