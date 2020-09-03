@@ -105,6 +105,26 @@
 | Number of hidden gcn layers                                          | 1            |
 | Weight for L2 loss                                                   | 5e-4 (0.0005)|
 
+# appnp
+
+| Statistic | Value              |
+| --------- | ------------------ |
+| Accuracy  | 0.9012345679012346 |
+| Precision | 0.930848861283644  |
+| Recall    | 0.9062925170068027 |
+| F-Score   | 0.9146820078875828 | 
+
+| Hyper-parameter                                                      | Value        |
+| -------------------------------------------------------------------- | ------------ |
+| Input feature dropout                                                | 0.25         |
+| Edge propagation dropout                                             | 0.5          |
+| Learning rate                                                        | 1e-1 (0.1)   |
+| Number of training epochs                                            | 800          |
+| Hidden unit sizes for appnp                                          | [64]         |
+| Number of propagation steps                                          | 10           |
+| Teleport Probability                                                 | 0.4          |
+| Weight for L2 loss                                                   | 5e-4 (0.0005)|
+
 
 ## Feature Engineering
 
