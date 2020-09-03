@@ -19,7 +19,7 @@
 
 <table>
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
-<tr><td>
+<tr><td><table></table>
 | Statistic | Value              |
 | ----------| ------------------ |
 | Accuracy  | 0.9012345679012346 |
