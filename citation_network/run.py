@@ -16,24 +16,25 @@ torch.manual_seed(2)
 
 def get_model_and_config(name):
     name = name.lower()
-    if name == 'gcn':
+    if name == "gcn":
         return GCN, GCN_CONFIG
-    elif name == 'gat':
+    elif name == "gat":
         return GAT, GAT_CONFIG
-    elif name == 'graphsage':
+    elif name == "graphsage":
         return GraphSAGE, GRAPHSAGE_CONFIG
-    elif name == 'appnp':
+    elif name == "appnp":
         return APPNP, APPNP_CONFIG
-    elif name == 'tagcn':
+    elif name == "tagcn":
         return TAGCN, TAGCN_CONFIG
-    elif name == 'agnn':
+    elif name == "agnn":
         return AGNN, AGNN_CONFIG
-    elif name == 'sgc':
+    elif name == "sgc":
         return SGC, SGC_CONFIG
-    elif name == 'gin':
+    elif name == "gin":
         return GIN, GIN_CONFIG
-    elif name == 'chebnet':
+    elif name == "chebnet":
         return ChebNet, CHEBNET_CONFIG
+
 
 def evaluate(model, features, labels, mask):
     """Gives accuracy."""
@@ -43,13 +44,15 @@ def evaluate(model, features, labels, mask):
         logits = logits[mask]
         labels = labels[mask]
 
-        # Statistics        
+        # Statistics
         _, indices = torch.max(logits, dim=1)
         correct = torch.sum(indices == labels)
         accuracy = correct.item() * 1.0 / len(labels)
 
         prediction = indices.long().cpu().numpy()
-        precision, recall, fscore, _ = score(labels, prediction, average="macro")
+        precision, recall, fscore, _ = score(
+            labels, prediction, average="macro"
+        )
 
         return accuracy, precision, recall, fscore
 
@@ -59,7 +62,7 @@ def main(args):
     data = load_data(args)
     features = torch.FloatTensor(data.features)
     labels = torch.LongTensor(data.labels)
-    if hasattr(torch, 'BoolTensor'):
+    if hasattr(torch, "BoolTensor"):
         train_mask = torch.BoolTensor(data.train_mask)
         val_mask = torch.BoolTensor(data.val_mask)
         test_mask = torch.BoolTensor(data.test_mask)
@@ -70,16 +73,21 @@ def main(args):
     in_feats = features.shape[1]
     n_classes = data.num_labels
     n_edges = data.graph.number_of_edges()
-    print("""----Data statistics------'
+    print(
+        """----Data statistics------'
       #Edges %d
       #Classes %d
       #Train samples %d
       #Val samples %d
-      #Test samples %d""" %
-          (n_edges, n_classes,
-              train_mask.int().sum().item(),
-              val_mask.int().sum().item(),
-              test_mask.int().sum().item()))
+      #Test samples %d"""
+        % (
+            n_edges,
+            n_classes,
+            train_mask.int().sum().item(),
+            val_mask.int().sum().item(),
+            test_mask.int().sum().item(),
+        )
+    )
 
     if args.gpu < 0:
         cuda = False
@@ -106,14 +114,11 @@ def main(args):
     norm[torch.isinf(norm)] = 0
     if cuda:
         norm = norm.cuda()
-    g.ndata['norm'] = norm.unsqueeze(1)
+    g.ndata["norm"] = norm.unsqueeze(1)
 
     # create GCN model
     GNN, config = get_model_and_config(args.model)
-    model = GNN(g,
-                in_feats,
-                n_classes,
-                *config['extra_args'])
+    model = GNN(g, in_feats, n_classes, *config["extra_args"])
 
     if cuda:
         model.cuda()
@@ -123,9 +128,11 @@ def main(args):
     loss_fcn = torch.nn.CrossEntropyLoss()
 
     # use optimizer
-    optimizer = torch.optim.Adam(model.parameters(),
-                                 lr=config['lr'],
-                                 weight_decay=config['weight_decay'])
+    optimizer = torch.optim.Adam(
+        model.parameters(),
+        lr=config["lr"],
+        weight_decay=config["weight_decay"],
+    )
 
     # initialize graph
     dur = []
@@ -144,7 +151,9 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore = evaluate(model, features, labels, val_mask)
+        accuracy, precision, recall, fscore = evaluate(
+            model, features, labels, val_mask
+        )
         print("Epoch:", epoch)
         print("Loss:", loss.item())
         print("Accuracy:", accuracy)
@@ -155,7 +164,9 @@ def main(args):
         print("=" * 80)
         print()
 
-    accuracy, precision, recall, fscore = evaluate(model, features, labels, test_mask)
+    accuracy, precision, recall, fscore = evaluate(
+        model, features, labels, test_mask
+    )
     print("=" * 80)
     print(" " * 28 + "Final Statistics")
     print("=" * 80)
@@ -165,16 +176,24 @@ def main(args):
     print("F-Score", fscore)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Node classification on citation networks.')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Node classification on citation networks."
+    )
     register_data_args(parser)
-    parser.add_argument("--model", type=str, default='gcn',
-                        help='model to use, available models are gcn, gat, graphsage, gin,'
-                             'appnp, tagcn, sgc, agnn')
-    parser.add_argument("--gpu", type=int, default=-1,
-            help="gpu")
-    parser.add_argument("--self-loop", action='store_true',
-            help="graph self-loop (default=False)")
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="gcn",
+        help="model to use, available models are gcn, gat, graphsage, gin,"
+        "appnp, tagcn, sgc, agnn",
+    )
+    parser.add_argument("--gpu", type=int, default=-1, help="gpu")
+    parser.add_argument(
+        "--self-loop",
+        action="store_true",
+        help="graph self-loop (default=False)",
+    )
     args = parser.parse_args()
     print(args)
     main(args)

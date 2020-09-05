@@ -42,7 +42,7 @@ def evaluate(model, features, labels, mask):
 
         # Statistics
         precision, recall, fscore, support = score(labels, indices)
-      
+
         # Accuracy
         acc = correct.item() * 1.0 / len(labels)
 
@@ -54,7 +54,7 @@ def main(args):
     data = load_data(args)
     features = torch.FloatTensor(data.features)
     labels = torch.LongTensor(data.labels)
-    if hasattr(torch, 'BoolTensor'):
+    if hasattr(torch, "BoolTensor"):
         train_mask = torch.BoolTensor(data.train_mask)
         val_mask = torch.BoolTensor(data.val_mask)
         test_mask = torch.BoolTensor(data.test_mask)
@@ -65,16 +65,21 @@ def main(args):
     num_feats = features.shape[1]
     n_classes = data.num_labels
     n_edges = data.graph.number_of_edges()
-    print("""----Data statistics------'
+    print(
+        """----Data statistics------'
       #Edges %d
       #Classes %d 
       #Train samples %d
       #Val samples %d
-      #Test samples %d""" %
-          (n_edges, n_classes,
-           train_mask.int().sum().item(),
-           val_mask.int().sum().item(),
-           test_mask.int().sum().item()))
+      #Test samples %d"""
+        % (
+            n_edges,
+            n_classes,
+            train_mask.int().sum().item(),
+            val_mask.int().sum().item(),
+            test_mask.int().sum().item(),
+        )
+    )
 
     if args.gpu < 0:
         cuda = False
@@ -95,17 +100,19 @@ def main(args):
     n_edges = g.number_of_edges()
     # create model
     heads = ([args.num_heads] * args.num_layers) + [args.num_out_heads]
-    model = GAT(g,
-                args.num_layers,
-                num_feats,
-                args.num_hidden,
-                n_classes,
-                heads,
-                F.elu,
-                args.in_drop,
-                args.attn_drop,
-                args.negative_slope,
-                args.residual)
+    model = GAT(
+        g,
+        args.num_layers,
+        num_feats,
+        args.num_hidden,
+        n_classes,
+        heads,
+        F.elu,
+        args.in_drop,
+        args.attn_drop,
+        args.negative_slope,
+        args.residual,
+    )
     print(model)
     if args.early_stop:
         stopper = EarlyStopping(patience=100)
@@ -115,7 +122,8 @@ def main(args):
 
     # use optimizer
     optimizer = torch.optim.Adam(
-        model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    )
 
     # initialize graph
     dur = []
@@ -141,20 +149,29 @@ def main(args):
         else:
             val_acc, _, _, _, _ = evaluate(model, features, labels, val_mask)
             if args.early_stop:
-                if stopper.step(val_acc, model):   
+                if stopper.step(val_acc, model):
                     break
 
-        print("Epoch {:05d} | Time(s) {:.4f} | Loss {:.4f} | TrainAcc {:.4f} |"
-              " ValAcc {:.4f} | ETputs(KTEPS) {:.2f}".
-              format(epoch, np.mean(dur), loss.item(), train_acc,
-                     val_acc, n_edges / np.mean(dur) / 1000))
+        print(
+            "Epoch {:05d} | Time(s) {:.4f} | Loss {:.4f} | TrainAcc {:.4f} |"
+            " ValAcc {:.4f} | ETputs(KTEPS) {:.2f}".format(
+                epoch,
+                np.mean(dur),
+                loss.item(),
+                train_acc,
+                val_acc,
+                n_edges / np.mean(dur) / 1000,
+            )
+        )
 
     print()
     if args.early_stop:
-        model.load_state_dict(torch.load('es_checkpoint.pt'))
+        model.load_state_dict(torch.load("es_checkpoint.pt"))
 
     print()
-    acc, precision, recall, fscore, support = evaluate(model, features, labels, test_mask)
+    acc, precision, recall, fscore, support = evaluate(
+        model, features, labels, test_mask
+    )
     print("")
     print("--- Test STATISTICS ---")
     print("Test Precision", precision)
@@ -171,38 +188,71 @@ def main(args):
     print("Average Support", support.mean())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='GAT')
+    parser = argparse.ArgumentParser(description="GAT")
     register_data_args(parser)
-    parser.add_argument("--gpu", type=int, default=-1,
-                        help="which GPU to use. Set -1 to use CPU.")
-    parser.add_argument("--epochs", type=int, default=800,
-                        help="number of training epochs")
-    parser.add_argument("--num-heads", type=int, default=4,
-                        help="number of hidden attention heads")
-    parser.add_argument("--num-out-heads", type=int, default=1,
-                        help="number of output attention heads")
-    parser.add_argument("--num-layers", type=int, default=1,
-                        help="number of hidden layers")
-    parser.add_argument("--num-hidden", type=int, default=8,
-                        help="number of hidden units")
-    parser.add_argument("--residual", action="store_true", default=False,
-                        help="use residual connection")
-    parser.add_argument("--in-drop", type=float, default=.4,
-                        help="input feature dropout")
-    parser.add_argument("--attn-drop", type=float, default=0.25,
-                        help="attention dropout")
-    parser.add_argument("--lr", type=float, default=1e-2,
-                        help="learning rate")
-    parser.add_argument('--weight-decay', type=float, default=5e-4,
-                        help="weight decay")
-    parser.add_argument('--negative-slope', type=float, default=0.2,
-                        help="the negative slope of leaky relu")
-    parser.add_argument('--early-stop', action='store_true', default=False,
-                        help="indicates whether to use early stop or not")
-    parser.add_argument('--fastmode', action="store_true", default=False,
-                        help="skip re-evaluate the validation set")
+    parser.add_argument(
+        "--gpu",
+        type=int,
+        default=-1,
+        help="which GPU to use. Set -1 to use CPU.",
+    )
+    parser.add_argument(
+        "--epochs", type=int, default=800, help="number of training epochs"
+    )
+    parser.add_argument(
+        "--num-heads",
+        type=int,
+        default=4,
+        help="number of hidden attention heads",
+    )
+    parser.add_argument(
+        "--num-out-heads",
+        type=int,
+        default=1,
+        help="number of output attention heads",
+    )
+    parser.add_argument(
+        "--num-layers", type=int, default=1, help="number of hidden layers"
+    )
+    parser.add_argument(
+        "--num-hidden", type=int, default=8, help="number of hidden units"
+    )
+    parser.add_argument(
+        "--residual",
+        action="store_true",
+        default=False,
+        help="use residual connection",
+    )
+    parser.add_argument(
+        "--in-drop", type=float, default=0.4, help="input feature dropout"
+    )
+    parser.add_argument(
+        "--attn-drop", type=float, default=0.25, help="attention dropout"
+    )
+    parser.add_argument("--lr", type=float, default=1e-2, help="learning rate")
+    parser.add_argument(
+        "--weight-decay", type=float, default=5e-4, help="weight decay"
+    )
+    parser.add_argument(
+        "--negative-slope",
+        type=float,
+        default=0.2,
+        help="the negative slope of leaky relu",
+    )
+    parser.add_argument(
+        "--early-stop",
+        action="store_true",
+        default=False,
+        help="indicates whether to use early stop or not",
+    )
+    parser.add_argument(
+        "--fastmode",
+        action="store_true",
+        default=False,
+        help="skip re-evaluate the validation set",
+    )
     args = parser.parse_args()
     print(args)
 

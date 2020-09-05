@@ -15,36 +15,36 @@ torch.manual_seed(2)
 
 
 class MoNet(nn.Module):
-    def __init__(self,
-                 g,
-                 in_feats,
-                 n_hidden,
-                 out_feats,
-                 n_layers,
-                 dim,
-                 n_kernels,
-                 dropout):
+    def __init__(
+        self,
+        g,
+        in_feats,
+        n_hidden,
+        out_feats,
+        n_layers,
+        dim,
+        n_kernels,
+        dropout,
+    ):
         super(MoNet, self).__init__()
         self.g = g
         self.layers = nn.ModuleList()
         self.pseudo_proj = nn.ModuleList()
 
         # Input layer
-        self.layers.append(
-            GMMConv(in_feats, n_hidden, dim, n_kernels))
-        self.pseudo_proj.append(
-            nn.Sequential(nn.Linear(2, dim), nn.Tanh()))
+        self.layers.append(GMMConv(in_feats, n_hidden, dim, n_kernels))
+        self.pseudo_proj.append(nn.Sequential(nn.Linear(2, dim), nn.Tanh()))
 
         # Hidden layer
         for _ in range(n_layers - 1):
             self.layers.append(GMMConv(n_hidden, n_hidden, dim, n_kernels))
             self.pseudo_proj.append(
-                nn.Sequential(nn.Linear(2, dim), nn.Tanh()))
+                nn.Sequential(nn.Linear(2, dim), nn.Tanh())
+            )
 
         # Output layer
         self.layers.append(GMMConv(n_hidden, out_feats, dim, n_kernels))
-        self.pseudo_proj.append(
-            nn.Sequential(nn.Linear(2, dim), nn.Tanh()))
+        self.pseudo_proj.append(nn.Sequential(nn.Linear(2, dim), nn.Tanh()))
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, feat, pseudo):
@@ -52,9 +52,9 @@ class MoNet(nn.Module):
         for i in range(len(self.layers)):
             if i != 0:
                 h = self.dropout(h)
-            h = self.layers[i](
-                self.g, h, self.pseudo_proj[i](pseudo))
+            h = self.layers[i](self.g, h, self.pseudo_proj[i](pseudo))
         return h
+
 
 def evaluate(model, features, pseudo, labels, mask):
     model.eval()
@@ -63,21 +63,24 @@ def evaluate(model, features, pseudo, labels, mask):
         logits = logits[mask]
         labels = labels[mask]
 
-        # Statistics        
+        # Statistics
         _, indices = torch.max(logits, dim=1)
         prediction = indices.long().cpu().numpy()
         correct = torch.sum(indices == labels)
         accuracy = correct.item() * 1.0 / len(labels)
-        precision, recall, fscore, _ = score(labels, prediction, average="macro")
+        precision, recall, fscore, _ = score(
+            labels, prediction, average="macro"
+        )
 
         return accuracy, precision, recall, fscore
+
 
 def main(args):
     # load and preprocess dataset
     data = load_data(args)
     features = torch.FloatTensor(data.features)
     labels = torch.LongTensor(data.labels)
-    if False: #hasattr(torch, 'BoolTensor'):
+    if False:  # hasattr(torch, 'BoolTensor'):
         train_mask = torch.BoolTensor(data.train_mask)
         val_mask = torch.BoolTensor(data.val_mask)
         test_mask = torch.BoolTensor(data.test_mask)
@@ -88,16 +91,21 @@ def main(args):
     in_feats = features.shape[1]
     n_classes = data.num_labels
     n_edges = data.graph.number_of_edges()
-    print("""----Data statistics------'
+    print(
+        """----Data statistics------'
       #Edges %d
       #Classes %d
       #Train samples %d
       #Val samples %d
-      #Test samples %d""" %
-          (n_edges, n_classes,
-           train_mask.sum().item(),
-           val_mask.sum().item(),
-           test_mask.sum().item()))
+      #Test samples %d"""
+        % (
+            n_edges,
+            n_classes,
+            train_mask.sum().item(),
+            val_mask.sum().item(),
+            test_mask.sum().item(),
+        )
+    )
 
     if args.gpu < 0:
         cuda = False
@@ -119,31 +127,33 @@ def main(args):
     us, vs = g.edges()
     pseudo = []
     for i in range(g.number_of_edges()):
-        pseudo.append([
-            1 / np.sqrt(g.in_degree(us[i])),
-            1 / np.sqrt(g.in_degree(vs[i]))
-        ])
+        pseudo.append(
+            [1 / np.sqrt(g.in_degree(us[i])), 1 / np.sqrt(g.in_degree(vs[i]))]
+        )
     pseudo = torch.Tensor(pseudo)
     if cuda:
         pseudo = pseudo.cuda()
 
     # create GraphSAGE model
-    model = MoNet(g,
-                  in_feats,
-                  args.n_hidden,
-                  n_classes,
-                  args.n_layers,
-                  args.pseudo_dim,
-                  args.n_kernels,
-                  args.dropout
-                  )
+    model = MoNet(
+        g,
+        in_feats,
+        args.n_hidden,
+        n_classes,
+        args.n_layers,
+        args.pseudo_dim,
+        args.n_kernels,
+        args.dropout,
+    )
 
     if cuda:
         model.cuda()
     loss_fcn = torch.nn.CrossEntropyLoss()
 
     # use optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    )
 
     # initialize graph
     dur = []
@@ -162,7 +172,9 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore = evaluate(model, features, pseudo, labels, val_mask)
+        accuracy, precision, recall, fscore = evaluate(
+            model, features, pseudo, labels, val_mask
+        )
         print("Epoch:", epoch)
         print("Loss:", loss.item())
         print("Accuracy:", accuracy)
@@ -173,7 +185,9 @@ def main(args):
         print("=" * 80)
         print()
 
-    accuracy, precision, recall, fscore = evaluate(model, features, pseudo, labels, test_mask)
+    accuracy, precision, recall, fscore = evaluate(
+        model, features, pseudo, labels, test_mask
+    )
     print("=" * 80)
     print(" " * 28 + "Final Statistics")
     print("=" * 80)
@@ -183,27 +197,38 @@ def main(args):
     print("F-Score", fscore)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='MoNet on citation network')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="MoNet on citation network")
     register_data_args(parser)
-    parser.add_argument("--dropout", type=float, default=0.25,
-                        help="dropout probability")
-    parser.add_argument("--gpu", type=int, default=-1,
-                        help="gpu")
-    parser.add_argument("--lr", type=float, default=1e-1,
-                        help="learning rate")
-    parser.add_argument("--n-epochs", type=int, default=800,
-                        help="number of training epochs")
-    parser.add_argument("--n-hidden", type=int, default=2,
-                        help="number of hidden gcn units")
-    parser.add_argument("--n-layers", type=int, default=1,
-                        help="number of hidden gcn layers")
-    parser.add_argument("--pseudo-dim", type=int, default=2,
-                        help="Pseudo coordinate dimensions in GMMConv, 2 for cora and 3 for pubmed")
-    parser.add_argument("--n-kernels", type=int, default=3,
-                        help="Number of kernels in GMMConv layer")
-    parser.add_argument("--weight-decay", type=float, default=5e-4,
-                        help="Weight for L2 loss")
+    parser.add_argument(
+        "--dropout", type=float, default=0.25, help="dropout probability"
+    )
+    parser.add_argument("--gpu", type=int, default=-1, help="gpu")
+    parser.add_argument("--lr", type=float, default=1e-1, help="learning rate")
+    parser.add_argument(
+        "--n-epochs", type=int, default=800, help="number of training epochs"
+    )
+    parser.add_argument(
+        "--n-hidden", type=int, default=2, help="number of hidden gcn units"
+    )
+    parser.add_argument(
+        "--n-layers", type=int, default=1, help="number of hidden gcn layers"
+    )
+    parser.add_argument(
+        "--pseudo-dim",
+        type=int,
+        default=2,
+        help="Pseudo coordinate dimensions in GMMConv, 2 for cora and 3 for pubmed",
+    )
+    parser.add_argument(
+        "--n-kernels",
+        type=int,
+        default=3,
+        help="Number of kernels in GMMConv layer",
+    )
+    parser.add_argument(
+        "--weight-decay", type=float, default=5e-4, help="Weight for L2 loss"
+    )
     args = parser.parse_args()
     print(args)
 

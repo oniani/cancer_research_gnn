@@ -12,13 +12,16 @@ from _thread import start_new_thread
 from functools import wraps
 import traceback
 
+
 def thread_wrapped_func(func):
     """
     Wraps a process entry point to make it work with OpenMP.
     """
+
     @wraps(func)
     def decorated_function(*args, **kwargs):
         queue = mp.Queue()
+
         def _queue_result():
             exception, trace, res = None, None, None
             try:
@@ -35,4 +38,5 @@ def thread_wrapped_func(func):
         else:
             assert isinstance(exception, Exception)
             raise exception.__class__(trace)
+
     return decorated_function

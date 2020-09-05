@@ -20,12 +20,14 @@ from gat import GAT
 from dgl.data.ppi import LegacyPPIDataset
 from torch.utils.data import DataLoader
 
+
 def collate(sample):
-    graphs, feats, labels =map(list, zip(*sample))
+    graphs, feats, labels = map(list, zip(*sample))
     graph = dgl.batch(graphs)
     feats = torch.from_numpy(np.concatenate(feats))
     labels = torch.from_numpy(np.concatenate(labels))
     return graph, feats, labels
+
 
 def evaluate(feats, model, subgraph, labels, loss_fcn):
     with torch.no_grad():
@@ -35,13 +37,13 @@ def evaluate(feats, model, subgraph, labels, loss_fcn):
             layer.g = subgraph
         output = model(feats.float())
         loss_data = loss_fcn(output, labels.float())
-        predict = np.where(output.data.cpu().numpy() >= 0., 1, 0)
-        score = f1_score(labels.data.cpu().numpy(),
-                         predict, average='micro')
+        predict = np.where(output.data.cpu().numpy() >= 0.0, 1, 0)
+        score = f1_score(labels.data.cpu().numpy(), predict, average="micro")
         return score, loss_data.item()
-        
+
+
 def main(args):
-    if args.gpu<0:
+    if args.gpu < 0:
         device = torch.device("cpu")
     else:
         device = torch.device("cuda:" + str(args.gpu))
@@ -54,30 +56,40 @@ def main(args):
     # define loss function
     loss_fcn = torch.nn.BCEWithLogitsLoss()
     # create the dataset
-    train_dataset = LegacyPPIDataset(mode='train')
-    valid_dataset = LegacyPPIDataset(mode='valid')
-    test_dataset = LegacyPPIDataset(mode='test')
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate)
-    valid_dataloader = DataLoader(valid_dataset, batch_size=batch_size, collate_fn=collate)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, collate_fn=collate)
+    train_dataset = LegacyPPIDataset(mode="train")
+    valid_dataset = LegacyPPIDataset(mode="valid")
+    test_dataset = LegacyPPIDataset(mode="test")
+    train_dataloader = DataLoader(
+        train_dataset, batch_size=batch_size, collate_fn=collate
+    )
+    valid_dataloader = DataLoader(
+        valid_dataset, batch_size=batch_size, collate_fn=collate
+    )
+    test_dataloader = DataLoader(
+        test_dataset, batch_size=batch_size, collate_fn=collate
+    )
     n_classes = train_dataset.labels.shape[1]
     num_feats = train_dataset.features.shape[1]
     g = train_dataset.graph
     heads = ([args.num_heads] * args.num_layers) + [args.num_out_heads]
     # define the model
-    model = GAT(g,
-                args.num_layers,
-                num_feats,
-                args.num_hidden,
-                n_classes,
-                heads,
-                F.elu,
-                args.in_drop,
-                args.attn_drop,
-                args.alpha,
-                args.residual)
+    model = GAT(
+        g,
+        args.num_layers,
+        num_feats,
+        args.num_hidden,
+        n_classes,
+        heads,
+        F.elu,
+        args.in_drop,
+        args.attn_drop,
+        args.alpha,
+        args.residual,
+    )
     # define the optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    )
     model = model.to(device)
     for epoch in range(args.epochs):
         model.train()
@@ -104,7 +116,9 @@ def main(args):
                 subgraph, feats, labels = valid_data
                 feats = feats.to(device)
                 labels = labels.to(device)
-                score, val_loss = evaluate(feats.float(), model, subgraph, labels.float(), loss_fcn)
+                score, val_loss = evaluate(
+                    feats.float(), model, subgraph, labels.float(), loss_fcn
+                )
                 score_list.append(score)
                 val_loss_list.append(val_loss)
             mean_score = np.array(score_list).mean()
@@ -127,39 +141,74 @@ def main(args):
         subgraph, feats, labels = test_data
         feats = feats.to(device)
         labels = labels.to(device)
-        test_score_list.append(evaluate(feats, model, subgraph, labels.float(), loss_fcn)[0])
+        test_score_list.append(
+            evaluate(feats, model, subgraph, labels.float(), loss_fcn)[0]
+        )
     print("Test F1-Score: {:.4f}".format(np.array(test_score_list).mean()))
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='GAT')
-    parser.add_argument("--gpu", type=int, default=-1,
-                        help="which GPU to use. Set -1 to use CPU.")
-    parser.add_argument("--epochs", type=int, default=400,
-                        help="number of training epochs")
-    parser.add_argument("--num-heads", type=int, default=4,
-                        help="number of hidden attention heads")
-    parser.add_argument("--num-out-heads", type=int, default=6,
-                        help="number of output attention heads")
-    parser.add_argument("--num-layers", type=int, default=2,
-                        help="number of hidden layers")
-    parser.add_argument("--num-hidden", type=int, default=256,
-                        help="number of hidden units")
-    parser.add_argument("--residual", action="store_true", default=True,
-                        help="use residual connection")
-    parser.add_argument("--in-drop", type=float, default=0,
-                        help="input feature dropout")
-    parser.add_argument("--attn-drop", type=float, default=0,
-                        help="attention dropout")
-    parser.add_argument("--lr", type=float, default=0.005,
-                        help="learning rate")
-    parser.add_argument('--weight-decay', type=float, default=0,
-                        help="weight decay")
-    parser.add_argument('--alpha', type=float, default=0.2,
-                        help="the negative slop of leaky relu")
-    parser.add_argument('--batch-size', type=int, default=2,
-                        help="batch size used for training, validation and test")
-    parser.add_argument('--patience', type=int, default=10,
-                        help="used for early stop")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="GAT")
+    parser.add_argument(
+        "--gpu",
+        type=int,
+        default=-1,
+        help="which GPU to use. Set -1 to use CPU.",
+    )
+    parser.add_argument(
+        "--epochs", type=int, default=400, help="number of training epochs"
+    )
+    parser.add_argument(
+        "--num-heads",
+        type=int,
+        default=4,
+        help="number of hidden attention heads",
+    )
+    parser.add_argument(
+        "--num-out-heads",
+        type=int,
+        default=6,
+        help="number of output attention heads",
+    )
+    parser.add_argument(
+        "--num-layers", type=int, default=2, help="number of hidden layers"
+    )
+    parser.add_argument(
+        "--num-hidden", type=int, default=256, help="number of hidden units"
+    )
+    parser.add_argument(
+        "--residual",
+        action="store_true",
+        default=True,
+        help="use residual connection",
+    )
+    parser.add_argument(
+        "--in-drop", type=float, default=0, help="input feature dropout"
+    )
+    parser.add_argument(
+        "--attn-drop", type=float, default=0, help="attention dropout"
+    )
+    parser.add_argument(
+        "--lr", type=float, default=0.005, help="learning rate"
+    )
+    parser.add_argument(
+        "--weight-decay", type=float, default=0, help="weight decay"
+    )
+    parser.add_argument(
+        "--alpha",
+        type=float,
+        default=0.2,
+        help="the negative slop of leaky relu",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=2,
+        help="batch size used for training, validation and test",
+    )
+    parser.add_argument(
+        "--patience", type=int, default=10, help="used for early stop"
+    )
     args = parser.parse_args()
     print(args)
 

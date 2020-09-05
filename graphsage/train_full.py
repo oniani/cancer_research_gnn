@@ -21,26 +21,52 @@ torch.manual_seed(2)
 
 
 class GraphSAGE(nn.Module):
-    def __init__(self,
-                 g,
-                 in_feats,
-                 n_hidden,
-                 n_classes,
-                 n_layers,
-                 activation,
-                 dropout,
-                 aggregator_type):
+    def __init__(
+        self,
+        g,
+        in_feats,
+        n_hidden,
+        n_classes,
+        n_layers,
+        activation,
+        dropout,
+        aggregator_type,
+    ):
         super(GraphSAGE, self).__init__()
         self.layers = nn.ModuleList()
         self.g = g
 
         # input layer
-        self.layers.append(SAGEConv(in_feats, n_hidden, aggregator_type, feat_drop=dropout, activation=activation))
+        self.layers.append(
+            SAGEConv(
+                in_feats,
+                n_hidden,
+                aggregator_type,
+                feat_drop=dropout,
+                activation=activation,
+            )
+        )
         # hidden layers
         for i in range(n_layers - 1):
-            self.layers.append(SAGEConv(n_hidden, n_hidden, aggregator_type, feat_drop=dropout, activation=activation))
+            self.layers.append(
+                SAGEConv(
+                    n_hidden,
+                    n_hidden,
+                    aggregator_type,
+                    feat_drop=dropout,
+                    activation=activation,
+                )
+            )
         # output layer
-        self.layers.append(SAGEConv(n_hidden, n_classes, aggregator_type, feat_drop=dropout, activation=None)) # activation None
+        self.layers.append(
+            SAGEConv(
+                n_hidden,
+                n_classes,
+                aggregator_type,
+                feat_drop=dropout,
+                activation=None,
+            )
+        )  # activation None
 
     def forward(self, features):
         h = features
@@ -57,20 +83,23 @@ def evaluate(model, features, labels, mask):
         logits = logits[mask]
         labels = labels[mask].cpu().numpy()
 
-        # Statistics        
+        # Statistics
         _, indices = torch.max(logits, dim=1)
         prediction = indices.long().cpu().numpy()
         accuracy = (prediction == labels).sum() / len(prediction)
-        precision, recall, fscore, _ = score(labels, prediction, average="macro")
+        precision, recall, fscore, _ = score(
+            labels, prediction, average="macro"
+        )
 
         return accuracy, precision, recall, fscore
+
 
 def main(args):
     # load and preprocess dataset
     data = load_data(args)
     features = torch.FloatTensor(data.features)
     labels = torch.LongTensor(data.labels)
-    if hasattr(torch, 'BoolTensor'):
+    if hasattr(torch, "BoolTensor"):
         train_mask = torch.BoolTensor(data.train_mask)
         val_mask = torch.BoolTensor(data.val_mask)
         test_mask = torch.BoolTensor(data.test_mask)
@@ -81,16 +110,21 @@ def main(args):
     in_feats = features.shape[1]
     n_classes = data.num_labels
     n_edges = data.graph.number_of_edges()
-    print("""----Data statistics------'
+    print(
+        """----Data statistics------'
       #Edges %d
       #Classes %d
       #Train samples %d
       #Val samples %d
-      #Test samples %d""" %
-          (n_edges, n_classes,
-           train_mask.int().sum().item(),
-           val_mask.int().sum().item(),
-           test_mask.int().sum().item()))
+      #Test samples %d"""
+        % (
+            n_edges,
+            n_classes,
+            train_mask.int().sum().item(),
+            val_mask.int().sum().item(),
+            test_mask.int().sum().item(),
+        )
+    )
 
     if args.gpu < 0:
         cuda = False
@@ -111,22 +145,25 @@ def main(args):
     n_edges = g.number_of_edges()
 
     # create GraphSAGE model
-    model = GraphSAGE(g,
-                      in_feats,
-                      args.n_hidden,
-                      n_classes,
-                      args.n_layers,
-                      F.relu,
-                      args.dropout,
-                      args.aggregator_type
-                      )
+    model = GraphSAGE(
+        g,
+        in_feats,
+        args.n_hidden,
+        n_classes,
+        args.n_layers,
+        F.relu,
+        args.dropout,
+        args.aggregator_type,
+    )
 
     if cuda:
         model.cuda()
     loss_fcn = torch.nn.CrossEntropyLoss()
 
     # use optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=args.lr, weight_decay=args.weight_decay
+    )
 
     # initialize graph
     dur = []
@@ -145,7 +182,9 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore = evaluate(model, features, labels, val_mask)
+        accuracy, precision, recall, fscore = evaluate(
+            model, features, labels, val_mask
+        )
         print("Epoch:", epoch)
         print("Loss:", loss.item())
         print("Accuracy:", accuracy)
@@ -156,7 +195,9 @@ def main(args):
         print("=" * 80)
         print()
 
-    accuracy, precision, recall, fscore = evaluate(model, features, labels, test_mask)
+    accuracy, precision, recall, fscore = evaluate(
+        model, features, labels, test_mask
+    )
     print("=" * 80)
     print(" " * 28 + "Final Statistics")
     print("=" * 80)
@@ -166,25 +207,32 @@ def main(args):
     print("F-Score", fscore)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='GraphSAGE')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="GraphSAGE")
     register_data_args(parser)
-    parser.add_argument("--dropout", type=float, default=0.25,
-                        help="dropout probability")
-    parser.add_argument("--gpu", type=int, default=-1,
-                        help="gpu")
-    parser.add_argument("--lr", type=float, default=1e-2,
-                        help="learning rate")
-    parser.add_argument("--n-epochs", type=int, default=800,
-                        help="number of training epochs")
-    parser.add_argument("--n-hidden", type=int, default=16,
-                        help="number of hidden gcn units")
-    parser.add_argument("--n-layers", type=int, default=1,
-                        help="number of hidden gcn layers")
-    parser.add_argument("--weight-decay", type=float, default=5e-4,
-                        help="Weight for L2 loss")
-    parser.add_argument("--aggregator-type", type=str, default="mean",
-                        help="Aggregator type: mean/gcn/pool/lstm")
+    parser.add_argument(
+        "--dropout", type=float, default=0.25, help="dropout probability"
+    )
+    parser.add_argument("--gpu", type=int, default=-1, help="gpu")
+    parser.add_argument("--lr", type=float, default=1e-2, help="learning rate")
+    parser.add_argument(
+        "--n-epochs", type=int, default=800, help="number of training epochs"
+    )
+    parser.add_argument(
+        "--n-hidden", type=int, default=16, help="number of hidden gcn units"
+    )
+    parser.add_argument(
+        "--n-layers", type=int, default=1, help="number of hidden gcn layers"
+    )
+    parser.add_argument(
+        "--weight-decay", type=float, default=5e-4, help="Weight for L2 loss"
+    )
+    parser.add_argument(
+        "--aggregator-type",
+        type=str,
+        default="mean",
+        help="Aggregator type: mean/gcn/pool/lstm",
+    )
     args = parser.parse_args()
     print(args)
 

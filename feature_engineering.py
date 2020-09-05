@@ -2,7 +2,7 @@
 import csv
 import random
 
-from collections import Counter  
+from collections import Counter
 
 import pandas as pd
 import numpy as np
@@ -30,9 +30,11 @@ def main():
 
     df.columns = header
 
-    x_train, x_test, y_train, y_test = train_test_split(df[feats], df["class"], test_size=0.3)
+    x_train, x_test, y_train, y_test = train_test_split(
+        df[feats], df["class"], test_size=0.3
+    )
 
-    clf = RandomForestClassifier(n_estimators = 200)
+    clf = RandomForestClassifier(n_estimators=200)
     clf.fit(x_train, y_train)
 
     importances = clf.feature_importances_
