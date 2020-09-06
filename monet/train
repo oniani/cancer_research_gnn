@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-python citation.py --dataset cora
+python3 citation.py --dataset cora

@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-python run.py --model chebnet --dataset cora
+python3 run.py --model chebnet --dataset cora

@@ -13,6 +13,7 @@ from gcn import GCN
 # from gcn_spmv import GCN
 
 from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.metrics import classification_report as report
 
 torch.manual_seed(2)
 
@@ -33,7 +34,9 @@ def evaluate(model, features, labels, mask):
             labels, prediction, average="macro"
         )
 
-        return accuracy, precision, recall, fscore
+        class_based_report = report(labels, prediction)
+
+        return accuracy, precision, recall, fscore, class_based_report
 
 
 def main(args):
@@ -132,7 +135,7 @@ def main(args):
         if epoch >= 3:
             dur.append(time.time() - t0)
 
-        accuracy, precision, recall, fscore = evaluate(
+        accuracy, precision, recall, fscore, _ = evaluate(
             model, features, labels, val_mask
         )
         print("Epoch:", epoch)
@@ -145,7 +148,7 @@ def main(args):
         print("=" * 80)
         print()
 
-    accuracy, precision, recall, fscore = evaluate(
+    accuracy, precision, recall, fscore, class_based_report = evaluate(
         model, features, labels, test_mask
     )
     print("=" * 80)
@@ -155,6 +158,7 @@ def main(args):
     print("Precision", precision)
     print("Recall", recall)
     print("F-Score", fscore)
+    print(class_based_report)
 
 
 if __name__ == "__main__":

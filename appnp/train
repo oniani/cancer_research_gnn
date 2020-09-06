@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-python train.py --dataset cora
+python3 train.py --dataset cora

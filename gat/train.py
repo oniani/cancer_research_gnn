@@ -20,6 +20,7 @@ from gat import GAT
 from utils import EarlyStopping
 
 from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.metrics import classification_report as report
 
 torch.manual_seed(2)
 
@@ -46,7 +47,9 @@ def evaluate(model, features, labels, mask):
         # Accuracy
         acc = correct.item() * 1.0 / len(labels)
 
-        return acc, precision, recall, fscore, support
+        class_based_report = report(labels, indices)
+
+        return acc, precision, recall, fscore, support, class_based_report
 
 
 def main(args):
@@ -147,7 +150,9 @@ def main(args):
         if args.fastmode:
             val_acc = accuracy(logits[val_mask], labels[val_mask])
         else:
-            val_acc, _, _, _, _ = evaluate(model, features, labels, val_mask)
+            val_acc, _, _, _, _, _ = evaluate(
+                model, features, labels, val_mask
+            )
             if args.early_stop:
                 if stopper.step(val_acc, model):
                     break
@@ -169,7 +174,7 @@ def main(args):
         model.load_state_dict(torch.load("es_checkpoint.pt"))
 
     print()
-    acc, precision, recall, fscore, support = evaluate(
+    acc, precision, recall, fscore, support, class_based_report = evaluate(
         model, features, labels, test_mask
     )
     print("")
@@ -186,6 +191,8 @@ def main(args):
     print("Average Recall", recall.mean())
     print("Average F-Score", fscore.mean())
     print("Average Support", support.mean())
+
+    print(class_based_report)
 
 
 if __name__ == "__main__":
