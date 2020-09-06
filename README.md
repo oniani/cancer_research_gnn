@@ -120,7 +120,7 @@
 | Number of hidden layers                    | 1             |
 | Number of hidden units                     | 8             |
 | Use residual connection                    | False         |
-| Input feature dropout                      | 4             |
+| Input feature dropout                      | 0.4           |
 | Attention dropout                          | 0.25          |
 | Learning rate                              | 1e-2 (0.01)   |
 | Weight decay                               | 5e-4 (0.0005) |
@@ -164,10 +164,10 @@
 
 | Statistic | Value              |
 | --------- | ------------------ |
-| Accuracy  | 0.9012345679012346 |
-| Precision | 0.930848861283644  |
-| Recall    | 0.9062925170068027 |
-| F-Score   | 0.9146820078875828 |
+| Accuracy  | 0.8888888888888888 |
+| Precision | 0.9251082251082252 |
+| Recall    | 0.8943877551020407 |
+| F-Score   | 0.9049666689418242 |
 
 </td><td>
 
@@ -225,7 +225,7 @@
 
 | Hyperparameter            | Value                 |
 | ------------------------- | --------------------- |
-| Extra args                | [16, 1, F.relu, True] |
+| Extra args                | [16, 1, F.relu, 0.5]  |
 | Learning rate             | 1e-2 (0.01)           |
 | Weight decay              | 5e-4 (0.0005)         |
 | Number of training epochs | 800                   |
@@ -288,17 +288,17 @@
 
 | Statistic | Value              |
 | --------- | -------------------|
-| Accuracy  | 0.9135802469135802 |
-| Precision | 0.912820512820513  |
-| Recall    | 0.9281179138321995 | 
-| F-Score   | 0.9169072865313466 |
+| Accuracy  | 0.9012345679012346 |
+| Precision | 0.9022735409953455 |
+| Recall    | 0.9201814058956915 |
+| F-Score   | 0.9073651359365645 |
 
 </td><td>
 
 | Hyperparameter            | Value            |
 | ------------------------- | ---------------- |
 | Extra args                | [32, 1, 2, True] |
-| Learning rate             | 1e-2 (0.01)      |
+| Learning rate             | 1e-2 (0.001)     |
 | Weight decay              | 5e-4 (0.0005)    |
 | Number of training epochs | 800              |
 
