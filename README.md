@@ -147,12 +147,12 @@
 
 | Hyperparameter              | Value         |
 | --------------------------- | ------------- |
-| Dropout probability         | 0.25          |
-| Learning rate               | 1e-1 (0.1)    |
-| Number of training epochs   | 800           |
-| Number of hidden gcn units  | 4             |
+| Dropout probability         | 0          |
+| Learning rate               | 1e-2 (0.01)    |
+| Number of training epochs   | 4000           |
+| Number of hidden gcn units  | 500             |
 | Number of hidden gcn layers | 1             |
-| Weight for L2 loss          | 5e-4 (0.0005) |
+| Weight for L2 loss          | 0 |
 
 </td></tr> </table>
 
