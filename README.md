@@ -22,7 +22,7 @@
 <tr><td><table></table>
 
 | Statistic | Value              |
-| ----------| ------------------ |
+| --------- | ------------------ |
 | Accuracy  | 0.9012345679012346 |
 | Precision | 0.9261904761904762 |
 | Recall    | 0.9102607709750566 |
@@ -49,7 +49,7 @@
 <tr><td>
 
 | Statistic | Value                |
-| ----------| -------------------- |
+| --------- | -------------------- |
 | Accuracy  | 0.2222222222222222   |
 | Precision | 0.031746031746031744 |
 | Recall    | 0.14285714285714285  |
@@ -75,12 +75,12 @@
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
 
-|Statistic | Value                | 
-| -------- | -------------------- |
-| Accuracy | 0.2222222222222222   |
-| Precision| 0.031746031746031744 |
-| Recall   | 0.14285714285714285  |
-| F-Score  | 0.051948051948051945 |
+| Statistic | Value                |
+| --------- | -------------------- |
+| Accuracy  | 0.2222222222222222   |
+| Precision | 0.031746031746031744 |
+| Recall    | 0.14285714285714285  |
+| F-Score   | 0.051948051948051945 |
 
 </td><td>
 
@@ -136,23 +136,23 @@
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
 
-| Statistic | Value                |
-| --------- | -------------------- |
-| Accuracy  | 0.8024691358024691   |
+| Statistic | Value              |
+| --------- | ------------------ |
+| Accuracy  | 0.8024691358024691 |
 | Precision | 0.8550170307357392 |
 | Recall    | 0.786734693877551  |
 | F-Score   | 0.8035058227176454 |
 
 </td><td>
 
-| Hyperparameter              | Value         |
-| --------------------------- | ------------- |
-| Dropout probability         | 0          |
-| Learning rate               | 1e-2 (0.01)    |
-| Number of training epochs   | 4000           |
-| Number of hidden gcn units  | 500             |
-| Number of hidden gcn layers | 1             |
-| Weight for L2 loss          | 0 |
+| Hyperparameter              | Value       |
+| --------------------------- | ----------- |
+| Dropout probability         | 0           |
+| Learning rate               | 1e-2 (0.01) |
+| Number of training epochs   | 4000        |
+| Number of hidden gcn units  | 500         |
+| Number of hidden gcn layers | 1           |
+| Weight for L2 loss          | 0           |
 
 </td></tr> </table>
 
@@ -223,12 +223,12 @@
 
 </td><td>
 
-| Hyperparameter            | Value                 |
-| ------------------------- | --------------------- |
-| Extra args                | [16, 1, F.relu, 0.5]  |
-| Learning rate             | 1e-2 (0.01)           |
-| Weight decay              | 5e-4 (0.0005)         |
-| Number of training epochs | 800                   |
+| Hyperparameter            | Value                |
+| ------------------------- | -------------------- |
+| Extra args                | [16, 1, F.relu, 0.5] |
+| Learning rate             | 1e-2 (0.01)          |
+| Weight decay              | 5e-4 (0.0005)        |
+| Number of training epochs | 800                  |
 
 </td></tr> </table>
 
@@ -238,11 +238,11 @@
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
 
-| Statistic | Value               |
-| --------- | ------------------- |
-| Accuracy  | 0.8271604938271605  |
+| Statistic | Value              |
+| --------- | ------------------ |
+| Accuracy  | 0.8271604938271605 |
 | Precision | 0.8362389490209041 |
-| Recall    | 0.8315759637188209 | 
+| Recall    | 0.8315759637188209 |
 | F-Score   | 0.8240298807695121 |
 
 </td><td>
@@ -251,8 +251,8 @@
 | ------------------------- | ---------------- |
 | Extra args                | [None, 1, False] |
 | Learning rate             | 1e-1 (0.1)       |
-| Weight decay              | 0  |
-| Number of training epochs | 4000              |
+| Weight decay              | 0                |
+| Number of training epochs | 4000             |
 
 </td></tr> </table>
 
@@ -262,21 +262,21 @@
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
 
-| Statistic | Value                |
-| --------- | -------------------- |
-| Accuracy  | 0.8765432098765432   |
-| Precision | 0.88992673992674 |
-| Recall    | 0.8888321995464853  |
+| Statistic | Value              |
+| --------- | ------------------ |
+| Accuracy  | 0.8765432098765432 |
+| Precision | 0.88992673992674   |
+| Recall    | 0.8888321995464853 |
 | F-Score   | 0.8850179383028748 |
 
 </td><td>
 
-| Hyperparameter            | Value                   |
-| ------------------------- | ----------------------- |
+| Hyperparameter            | Value                    |
+| ------------------------- | ------------------------ |
 | Extra args                | [100, 1, 1.0, True, 0.1] |
-| Learning rate             | 1e-1 (0.1)              |
-| Weight decay              | 0           |
-| Number of training epochs | 200                     |
+| Learning rate             | 1e-1 (0.1)               |
+| Weight decay              | 0                        |
+| Number of training epochs | 200                      |
 
 </td></tr> </table>
 
@@ -287,7 +287,7 @@
 <tr><td>
 
 | Statistic | Value              |
-| --------- | -------------------|
+| --------- | ------------------ |
 | Accuracy  | 0.9012345679012346 |
 | Precision | 0.9022735409953455 |
 | Recall    | 0.9201814058956915 |
