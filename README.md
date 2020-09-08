@@ -240,19 +240,19 @@
 
 | Statistic | Value               |
 | --------- | ------------------- |
-| Accuracy  | 0.2345679012345679  |
-| Precision | 0.17500000000000002 |
-| Recall    | 0.15714285714285717 | 
-| F-Score   | 0.07845216008481315 |
+| Accuracy  | 0.8271604938271605  |
+| Precision | 0.8362389490209041 |
+| Recall    | 0.8315759637188209 | 
+| F-Score   | 0.8240298807695121 |
 
 </td><td>
 
 | Hyperparameter            | Value            |
 | ------------------------- | ---------------- |
-| Extra args                | [None, 2, False] |
+| Extra args                | [None, 1, False] |
 | Learning rate             | 1e-1 (0.1)       |
-| Weight decay              | 5e-6 (0.000005)  |
-| Number of training epochs | 800              |
+| Weight decay              | 0  |
+| Number of training epochs | 4000              |
 
 </td></tr> </table>
 
