@@ -273,10 +273,10 @@
 
 | Hyperparameter            | Value                   |
 | ------------------------- | ----------------------- |
-| Extra args                | [32, 2, 1.0, True, 0.5] |
+| Extra args                | [100, 1, 1.0, True, 0.1] |
 | Learning rate             | 1e-1 (0.1)              |
-| Weight decay              | 5e-4 (0.0005)           |
-| Number of training epochs | 800                     |
+| Weight decay              | 0           |
+| Number of training epochs | 200                     |
 
 </td></tr> </table>
 
