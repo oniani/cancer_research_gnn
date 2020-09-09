@@ -103,30 +103,30 @@
 <tr><th>Statistics</th><th>Hyperparameters</th></tr>
 <tr><td>
 
-| Statistic | Value               |
-| --------- | ------------------- |
-| Accuracy  | 0.753  |
+| Statistic | Value |
+| --------- | ----- |
+| Accuracy  | 0.753 |
 | Precision | 0.726 |
-| Recall    | 0.684  |
+| Recall    | 0.684 |
 | F-Score   | 0.697 |
 
 </td><td>
 
-| Hyperparameter                             | Value         |
-| ------------------------------------------ | ------------- |
-| Number of training epochs                  | 1000           |
-| Number of hidden attention heads           | 4             |
-| Uumber of output attention heads           | 1             |
-| Number of hidden layers                    | 1             |
-| Number of hidden units                     | 200             |
-| Use residual connection                    | False         |
+| Hyperparameter                             | Value       |
+| ------------------------------------------ | ----------- |
+| Number of training epochs                  | 1000        |
+| Number of hidden attention heads           | 4           |
+| Uumber of output attention heads           | 1           |
+| Number of hidden layers                    | 1           |
+| Number of hidden units                     | 200         |
+| Use residual connection                    | False       |
 | Input feature dropout                      | 0           |
-| Attention dropout                          | 0          |
-| Learning rate                              | 1e-2 (0.01)   |
-| Weight decay                               | 0 |
-| The negative slope of leaky relu           | 0.2           |
-| Indicates whether to use early stop or not | False         |
-| Skip re-evaluate the validation set        | False         |
+| Attention dropout                          | 0           |
+| Learning rate                              | 1e-2 (0.01) |
+| Weight decay                               | 0           |
+| The negative slope of leaky relu           | 0.2         |
+| Indicates whether to use early stop or not | False       |
+| Skip re-evaluate the validation set        | False       |
 
 </td></tr> </table>
 
